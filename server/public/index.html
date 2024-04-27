@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Loan Calculator</h1>
+    <div class="container">
+        <h2>Select an Item:</h2>
+        <button onclick="openModal('Smartphone', 999.99, 1)">Smartphone</button>
+        <button onclick="openModal('Laptop', 1499.99, 1)">Laptop</button>
+        <button onclick="openModal('Smartwatch', 299.99, 1)">Smartwatch</button>
+        <!-- Add more buttons for other gadgets as needed -->
+
+        <!-- Hidden modal -->
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <h2>Enter Loan Details</h2>
+                <form id="loanForm">
+                    <label for="price">Price of the selected item:</label>
+                    <input type="number" id="price" name="price" step="0.01" required><br>
+
+                    <label for="bankChoice">Select a bank:</label>
+                    <select id="bankChoice" name="bankChoice" onchange="updateLoanTypes()" required>
+                        <option value="1">MAIB</option>
+                        <option value="2">OtpBank</option>
+                        <option value="3">VictoriaBank</option>
+                    </select><br>
+
+                    <div id="loanTypeContainer">
+                        <!-- Loan types will be dynamically added here based on bank choice -->
+                    </div>
+
+                    <label for="loanTermMonths">Loan term (months):</label>
+                    <input type="number" id="loanTermMonths" name="loanTermMonths" required><br>
+
+                    <button type="submit">Calculate Loan</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="loanResult"></div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
