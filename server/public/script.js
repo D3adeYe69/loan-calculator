@@ -1,4 +1,4 @@
-function openModal(itemName, itemPrice, bankChoice) {
+function openNewWindow(itemName, itemPrice, imageUrl) {
     const formattedPrice = itemPrice.toFixed(2);
     document.getElementById('price').value = formattedPrice;
     document.getElementById('myModal').style.display = 'block';
@@ -7,6 +7,7 @@ function openModal(itemName, itemPrice, bankChoice) {
 
 function closeModal() {
     document.getElementById('myModal').style.display = 'none';
+    clearOutput();
 }
 
 function updateLoanTypes() {
@@ -17,7 +18,7 @@ function updateLoanTypes() {
     // Clear existing loan types
     loanTypeContainer.innerHTML = '';
 
-    // Check if price is greater than or equal to the minimum loan amount for the selected bank
+    // Add logic to dynamically update loan types based on bank choice and price
     if (bankChoice == 1 && price >= 300) { // MAIB - minimum loan amount: 300
         loanTypeContainer.innerHTML = '<label for="loanType">Loan type (MAIB):</label>' +
             '<select id="loanType" name="loanType" required>' +
@@ -38,6 +39,14 @@ function updateLoanTypes() {
             '</select><br>';
     }
 }
+function clearOutput() {
+    // Remove all output elements (function outputs) from list items
+    var outputElements = document.querySelectorAll("div > p");
+    outputElements.forEach(function(outputElement) {
+        outputElement.remove();
+    });
+}
+
 
 $(document).ready(function() {
     $('#loanForm').submit(function(event) {
@@ -52,11 +61,11 @@ $(document).ready(function() {
 
         $.ajax({
             type: 'POST',
-            url: 'http://localhost:3000/calculateLoan',
-            data: JSON.stringify(formData),
-            contentType: 'application/json',
+            url: 'http://localhost:3000/calculateLoan', 
+            data: formData,
             success: function(response) {
                 $('#loanResult').html('<p>' + response + '</p>');
+
             },
             error: function(xhr, status, error) {
                 console.error('Error:', error);
@@ -65,3 +74,5 @@ $(document).ready(function() {
         });
     });
 });
+
+

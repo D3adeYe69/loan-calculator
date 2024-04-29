@@ -4,49 +4,419 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Loan Calculator</title>
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Global styles */
+        body {
+            background-color: #f5f5f5;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Header styles */
+        .header-container {
+            position: sticky;
+            top: 0;
+            background-color: #ffffff;
+            padding: 20px;
+            text-align: center;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-container h2 {
+            margin-bottom: 10px;
+            font-size: 24px;
+        }
+
+        .header-container h3 {
+            margin-top: 0;
+            font-size: 18px;
+        }
+
+        /* Item container styles */
+        .item-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .item-container {
+            background-color: #ffffff;
+            padding: 20px;
+            text-align: center;
+            width: calc(25% - 20px); /* Adjust width for 4 items in a row with margin */
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            box-sizing: border-box; /* Include padding in width calculation */
+        }
+
+        .item-container:hover {
+            transform: translateY(-5px);
+        }
+
+        .item-info {
+            text-align: center;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        .item-image {
+            width: 100px;
+            height: auto;
+            margin-top: 10px;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+        }
+
+        #site-logo {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 100px;
+            height: auto;
+            z-index: 1001; /* Ensure logo is above other elements */
+        }
+        #Maib {
+            position: fixed;
+            top: 20px;
+            left: 200px;
+            width: 100px;
+            height: auto;
+            z-index: 1001; /* Ensure logo is above other elements */
+        }
+        
+    </style>
 </head>
 <body>
-    <h1>Loan Calculator</h1>
-    <div class="container">
-        <h2>Select an Item:</h2>
-        <button onclick="openModal('Smartphone', 999.99, 1)">Smartphone</button>
-        <button onclick="openModal('Laptop', 1499.99, 1)">Laptop</button>
-        <button onclick="openModal('Smartwatch', 299.99, 1)">Smartwatch</button>
-        <!-- Add more buttons for other gadgets as needed -->
-
-        <!-- Hidden modal -->
-        <div id="myModal" class="modal">
-            <div class="modal-content">
-                <span class="close" onclick="closeModal()">&times;</span>
-                <h2>Enter Loan Details</h2>
-                <form id="loanForm">
-                    <label for="price">Price of the selected item:</label>
-                    <input type="number" id="price" name="price" step="0.01" required><br>
-
-                    <label for="bankChoice">Select a bank:</label>
-                    <select id="bankChoice" name="bankChoice" onchange="updateLoanTypes()" required>
-                        <option value="1">MAIB</option>
-                        <option value="2">OtpBank</option>
-                        <option value="3">VictoriaBank</option>
-                    </select><br>
-
-                    <div id="loanTypeContainer">
-                        <!-- Loan types will be dynamically added here based on bank choice -->
-                    </div>
-
-                    <label for="loanTermMonths">Loan term (months):</label>
-                    <input type="number" id="loanTermMonths" name="loanTermMonths" required><br>
-
-                    <button type="submit">Calculate Loan</button>
-                </form>
+<body style="background-color: #ffffff;">
+<!-- Add this code inside the body tag -->
+<div id="myModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2>Loan Details</h2>
+        <form id="loanForm" action="calculate_loan.php" method="post">
+            <input type="hidden" id="price" name="price">
+            <div>
+                <label for="bankChoice">Bank Choice:</label>
+                <select id="bankChoice" name="bankChoice" onchange="updateLoanTypes()" required>
+                    <option value="1">MAIB</option>
+                    <option value="2">OtpBank</option>
+                    <option value="3">VictoriaBank</option>
+                </select>
             </div>
-        </div>
-
+            <div id="loanTypeContainer">
+                <!-- Loan types will be dynamically added here based on bank choice -->
+            </div>
+            <div>
+                <label for="loanTermMonths">Loan Term (Months):</label>
+                <input type="number" id="loanTermMonths" name="loanTermMonths" min="1" required>
+            </div>
+            <button type="submit">Calculate Loan</button>
+        </form>
+        <!-- Add this code inside the modal-content div -->
         <div id="loanResult"></div>
     </div>
+</div>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="script.js"></script>
+
+<!-- Add this script tag at the end of the body tag -->
+
+
+<img id="site-logo" src="https://cdn.discordapp.com/attachments/1155457200114913290/1234271186997743636/image.png?ex=6630201e&is=662ece9e&hm=3679e7b605cfe64ac5e9cca6517e2bf605d40f01093ace6e8289835c29d79bdd&" alt="Site Logo" style="position: fixed; top: 20px; left: 20px; width: 100px; height: auto;">
+<div class="header-container" style="position: sticky; top: 0; background-color: #ffffff; padding: 20px; text-align: center; z-index: 1000;">
+    <h2 style="text-align: left; margin-left: 100px;">EasyCredit</h2>
+<img id="Maib-logo" src="https://www.maib.md/storage/media/2021/10/7//image_1662960661_ItpeALFmjm.png" alt="Maib Logo" style="position: fixed; top: 20px; left: 1350px; width: 100px; height: auto;">
+<img id="victoria-logo" src="https://constructdepo.md/wp-content/uploads/2020/10/victoriabank-logo-cu-endorsment-cmyk-fin01.jpg" alt="otp Logo" style="position: fixed; top: 20px; left: 1200px; width: 100px; height: auto;">
+<img id="otp-logo" src="https://scontent.fkiv1-1.fna.fbcdn.net/v/t39.30808-6/284006753_4640139422753608_3652363880067393939_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=5f2048&_nc_ohc=22nWQm8gvPsAb6J2zBn&_nc_ht=scontent.fkiv1-1.fna&oh=00_AfAfjUpUN07hEydvupwwEtf1Glq1pt_qprHacRjdyg6aNA&oe=6635491E" alt="otp Logo" style="position: fixed; top: 20px; left: 1300px; width: 50px; height: auto;">
+    <h3>Choose your product:</h3>
+   
+    
+</div>
+<div style="display: flex; flex-wrap: wrap;">
+    <div class="item-container" onclick="openNewWindow('Smarphone', 10000, 'https://darwin.md/images/product/2023/09/darwin-apple-iphone-12-128-gb-black-107539.webp')">
+        <div class="item-info">
+            <span>Smarphone</span>
+            <br>
+            <span>10000 lei</span> <!-- Display the price -->
+        </div>
+        <div>
+            <img class="item-image" src="https://darwin.md/images/product/2023/09/darwin-apple-iphone-12-128-gb-black-107539.webp">
+        </div>
+        <div class="specifications">
+            <p>Specifications:</p>
+            <ul>
+                <li>Screen Size: 6.1 inches</li>
+                <li>Camera: Dual 12MP Ultra Wide and Wide cameras</li>
+                <li>Processor: A14 Bionic chip</li>
+                <li>Storage: 128 GB</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="item-container" onclick="openNewWindow('Laptop', 27999, 'https://eshop-cdn.orange.md/product_catalog/4683/384516491a464403a9876c6500a157fc.wl.png')">
+        <div class="item-info">
+            <span>Laptop</span>
+            <br>
+            <span>27999 lei</span>
+        </div>
+        <div>
+            <img class="item-image" src="https://eshop-cdn.orange.md/product_catalog/4683/384516491a464403a9876c6500a157fc.wl.png">
+        </div>
+        <div class="specifications">
+            <p>Specifications:</p>
+            <ul>
+                <li>Processor: Intel Core i7</li>
+                <li>RAM: 16 GB</li>
+                <li>Storage: 512 GB SSD</li>
+                <li>Graphics: NVIDIA GeForce RTX 3060</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="item-container" onclick="openNewWindow('Headphones', 2000, 'https://eshop-cdn.orange.md/product_catalog/4996/8776ccb8b5f54e5a8f7d5ed8e47f4998.wl.png')">
+        <div class="item-info">
+            <span>Headphones</span>
+            <br>
+            <span>2000 lei</span> 
+        </div>
+        <div>
+            <img class="item-image" src="https://eshop-cdn.orange.md/product_catalog/4996/8776ccb8b5f54e5a8f7d5ed8e47f4998.wl.png">
+        </div>
+        <div class="specifications">
+            <p>Specifications:</p>
+            <ul>
+                <li>Wireless Connectivity: Bluetooth 5.0</li>
+                <li>Battery Life: Up to 30 hours</li>
+                <li>Driver Size: 40mm</li>
+                <li>Active Noise Cancellation: Yes</li>
+            </ul>
+        </div>
+    </div>
+    <div class="item-container" onclick="openNewWindow('Smart watch', 1800, 'https://eshop-cdn.orange.md/product_catalog/4550/cbda85ab758a43249f7c7fd33fc1c8b8.wl.png')">
+        <div class="item-info">
+            <span>Smart watch</span>
+            <br>
+            <span>1800 lei</span> 
+        </div>
+        <div>
+            <img class="item-image" src="https://eshop-cdn.orange.md/product_catalog/4550/cbda85ab758a43249f7c7fd33fc1c8b8.wl.png">
+        </div>
+        <div class="specifications">
+            <p>Specifications:</p>
+            <ul>
+                <li>Display: 1.2 inches OLED</li>
+                <li>Battery Life: Up to 7 days</li>
+                <li>Water Resistance: 50 meters</li>
+                <li>Health Tracking: Heart rate, Sleep, Activity</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="item-container" onclick="openNewWindow('Keyboard', 500, 'https://darwin.md/images/product/2022/06/darwin-tastatura-apple-mq052rs-a-white-055.webp')">
+        <div class="item-info">
+            <span>Keyboard</span>
+            <br>
+            <span>500 lei</span> 
+        </div>
+        <div>
+            <img class="item-image" src="https://darwin.md/images/product/2022/06/darwin-tastatura-apple-mq052rs-a-white-055.webp">
+        </div>
+        <div class="specifications">
+            <p>Specifications:</p>
+            <ul>
+                <li>Compatibility: Mac computers</li>
+                <li>Connectivity: Bluetooth</li>
+                <li>Layout: QWERTY</li>
+                <li>Material: Aluminum</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="item-container" onclick="openNewWindow('PC', 39050, 'https://darwin.md/images/product/2023/12/darwin-calculator-de-jocuri-navigator-00480-black-380807.webp')">
+        <div class="item-info">
+            <span>PC</span>
+            <br>
+            <span>39050 lei</span> 
+        </div>
+        <div>
+            <img class="item-image" src="https://darwin.md/images/product/2023/12/darwin-calculator-de-jocuri-navigator-00480-black-380807.webp">
+        </div>
+        <div class="specifications">
+            <p>Specifications:</p>
+            <ul>
+                <li>Processor: AMD Ryzen 7 5800X</li>
+                <li>Graphics Card: NVIDIA GeForce RTX 3080</li>
+                <li>RAM: 32 GB DDR4</li>
+                <li>Storage: 1 TB NVMe SSD + 2 TB HDD</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="item-container" onclick="openNewWindow('TV', 20000, 'https://eshop-cdn.orange.md/product_catalog/4420/3afff671c58940a9b39c1bb3c2e32122.wl.png.webp')">
+        <div class="item-info">
+            <span>TV</span>
+            <br>
+            <span>20000 lei</span> 
+        </div>
+        <div>
+            <img class="item-image" src="https://eshop-cdn.orange.md/product_catalog/4420/3afff671c58940a9b39c1bb3c2e32122.wl.png.webp">
+        </div>
+        <div class="specifications">
+            <p>Specifications:</p>
+            <ul>
+                <li>Screen Size: 55 inches</li>
+                <li>Resolution: 4K Ultra HD</li>
+                <li>Smart Features: Android TV, Google Assistant, Chromecast built-in</li>
+                <li>Connectivity: Wi-Fi, Bluetooth, HDMI, USB</li>
+            </ul>
+        </div>
+    </div>
+    <div class="item-container" onclick="openNewWindow('Tablet', 9000, 'https://eshop-cdn.orange.md/product_catalog/3610/47c2810320f640158799975159e78627.wl.png')">
+        <div class="item-info">
+            <span>Tablet</span>
+            <br>
+            <span>9000 lei</span> 
+        </div>
+        <div>
+            <img class="item-image" src="https://eshop-cdn.orange.md/product_catalog/3610/47c2810320f640158799975159e78627.wl.png">
+        </div>
+        <div class="specifications">
+            <p>Specifications:</p>
+            <ul>
+                <li>Screen Size: 10.2 inches</li>
+                <li>Resolution: 2160 x 1620 pixels</li>
+                <li>Processor: Apple A13 Bionic</li>
+                <li>Storage: 128 GB</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="item-container" onclick="openNewWindow('Detector inteligent gaze naturale', 1000, 'https://eshop-cdn.orange.md/product_catalog/4900/172eec8d5a3348789d5fa9ba6d7f6c13.wl.png')">
+        <div class="item-info">
+            <span>Detector inteligent gaze naturale</span>
+            <br>
+            <span>1000 lei</span> 
+        </div>
+        <div>
+            <img class="item-image" src="https://eshop-cdn.orange.md/product_catalog/4900/172eec8d5a3348789d5fa9ba6d7f6c13.wl.png">
+        </div>
+        <div class="specifications">
+            <p>Specifications:</p>
+            <ul>
+                <li>Gas Detected: Natural Gas</li>
+                <li>Power Source: Battery</li>
+                <li>Alert: Audible and Visual</li>
+                <li>Installation: Wall-mounted</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="item-container" onclick="openNewWindow('Walkie-Talkie', 1340, 'https://eshop-cdn.orange.md/product_catalog/4905/1984d567ce004401ba1b28ab318a1c16.wl.png')">
+        <div class="item-info">
+            <span>Walkie-Talkie</span>
+            <br>
+            <span>1340 lei</span> 
+        </div>
+        <div>
+            <img class="item-image" src="https://eshop-cdn.orange.md/product_catalog/4905/1984d567ce004401ba1b28ab318a1c16.wl.png">
+        </div>
+        <div class="specifications">
+            <p>Specifications:</p>
+            <ul>
+                <li>Range: Up to 5 km</li>
+                <li>Channels: 22</li>
+                <li>Battery: Rechargeable</li>
+                <li>Features: VOX, NOAA Weather Alert</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="item-container" onclick="openNewWindow('Wireless Headphones', 1600, 'https://eshop-cdn.orange.md/product_catalog/4664/9544e21073c64989b328b16a4ee0f3c8.wl.png')">
+        <div class="item-info">
+            <span>Wireless Headphones</span>
+            <br>
+            <span>1600 lei</span> 
+        </div>
+        <div>
+            <img class="item-image" src="https://eshop-cdn.orange.md/product_catalog/4664/9544e21073c64989b328b16a4ee0f3c8.wl.png">
+        </div>
+        <div class="specifications">
+            <p>Specifications:</p>
+            <ul>
+                <li>Driver Size: 40mm</li>
+                <li>Connectivity: Bluetooth 5.0</li>
+                <li>Battery Life: Up to 30 hours</li>
+                <li>Active Noise Cancellation: Yes</li>
+            </ul>
+        </div>
+    </div>
+    <div class="item-container" onclick="openNewWindow('Power Bank', 1200, 'https://eshop-cdn.orange.md/product_catalog/3939/ea7c25beec62449caeab4b4d67463c63.wl.png')">
+        <div class="item-info">
+            <span>Power Bank</span>
+            <br>
+            <span>1200 lei</span> 
+        </div>
+        <div>
+            <img class="item-image" src="https://eshop-cdn.orange.md/product_catalog/3939/ea7c25beec62449caeab4b4d67463c63.wl.png">
+        </div>
+        <div class="specifications">
+            <p>Specifications:</p>
+            <ul>
+                <li>Capacity: 10000 mAh</li>
+                <li>Ports: USB-A, USB-C</li>
+                <li>Output: 5V/2.4A</li>
+                <li>Features: LED indicators, Fast charging support</li>
+            </ul>
+        </div>
+    </div>
+    
+    
+    
+    <!-- Add similar blocks for other products with their respective specifications -->
+    
+    
+    
+    <!-- Add similar blocks for other products with their respective specifications -->
+    
+    
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
