@@ -15,22 +15,22 @@ function updateLoanTypes() {
     const loanTypeContainer = document.getElementById('loanTypeContainer');
     const price = parseFloat(document.getElementById('price').value);
 
-    // Clear existing loan types
+    
     loanTypeContainer.innerHTML = '';
 
-    // Add logic to dynamically update loan types based on bank choice and price
-    if (bankChoice == 1 && price >= 300) { // MAIB - minimum loan amount: 300
+    
+    if (bankChoice == 1 && price >= 300) { 
         loanTypeContainer.innerHTML = '<label for="loanType">Loan type (MAIB):</label>' +
             '<select id="loanType" name="loanType" required>' +
             '<option value="1">Credit de Consum Espresso</option>' +
             '</select><br>';
-    } else if (bankChoice == 2 && price >= 1000) { // OtpBank - minimum loan amount: 1000
+    } else if (bankChoice == 2 && price >= 1000) { 
         loanTypeContainer.innerHTML = '<label for="loanType">Select loan type (OtpBank):</label>' +
             '<select id="loanType" name="loanType" required>' +
             '<option value="3">Credit de Nevoi Personale ONLINE</option>' +
             '<option value="4">Credit de Nevoi Personale</option>' +
             '</select><br>';
-    } else if (bankChoice == 3 && price >= 500) { // VictoriaBank - minimum loan amount: 500
+    } else if (bankChoice == 3 && price >= 500) { 
         loanTypeContainer.innerHTML = '<label for="loanType">Select loan type (VictoriaBank):</label>' +
             '<select id="loanType" name="loanType" required>' +
             '<option value="5">Credit Express</option>' +

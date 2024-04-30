@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// Define loan calculation function
+
 float calculateLoan(float price, int loanType, int bankChoice, int loanTermMonths) {
     float interestRate;
     float maxLoanAmount;
@@ -9,115 +9,115 @@ float calculateLoan(float price, int loanType, int bankChoice, int loanTermMonth
     int minLoanTermMonths = 6;
     int maxLoanTermMonths;
 
-    // Bank A (MAIB) - Credit Express
+    
     if (bankChoice == 1) {
-        // Credit Express loan details for MAIB
-        maxLoanAmount = 300000; // Maximum loan amount
-        maxLoanTermMonths = 60; // Maximum loan term
+        
+        maxLoanAmount = 300000; 
+        maxLoanTermMonths = 60; 
         if (price < minLoanAmount || price > maxLoanAmount) {
             printf("Loan amount for Credit Express at MAIB must be between %.2f and %.2f.\n", minLoanAmount, maxLoanAmount);
-            return -1; // Return -1 to indicate invalid loan amount
+            return -1; 
         }
         if (loanTermMonths < minLoanTermMonths || loanTermMonths > maxLoanTermMonths) {
             printf("Loan term for Credit Express at MAIB must be between %d and %d months.\n", minLoanTermMonths, maxLoanTermMonths);
-            return -1; // Return -1 to indicate invalid loan term
+            return -1; 
         }
-        interestRate = 0.095; // 9.5% annual interest rate for Credit Express at MAIB
+        interestRate = 0.095; 
     }
-    // Bank B (OtpBank) - Credit de Nevoi Personale
+    
  
-    // Bank B (Second Bank) - Credit de Nevoi Personale
+    
     else if (bankChoice == 2) {
-        if (loanType == 3) { // Credit de Nevoi Personale ONLINE
-            maxLoanAmount = 100000; // Maximum loan amount for ONLINE loan
-            minLoanAmount = 1000; // Minimum loan amount for ONLINE loan
-            maxLoanTermMonths = 60; // Maximum loan term for ONLINE loan
+        if (loanType == 3) { 
+            maxLoanAmount = 100000; 
+            minLoanAmount = 1000; 
+            maxLoanTermMonths = 60; 
             if (price < minLoanAmount || price > maxLoanAmount) {
                 printf("Loan amount for ONLINE loan must be between %.2f and %.2f.\n", minLoanAmount, maxLoanAmount);
-                return -1; // Return -1 to indicate invalid loan amount
+                return -1; 
             }
             if (loanTermMonths < minLoanTermMonths || loanTermMonths > maxLoanTermMonths) {
                 printf("Loan term for ONLINE loan must be between %d and %d months.\n", minLoanTermMonths, maxLoanTermMonths);
-                return -1; // Return -1 to indicate invalid loan term
+                return -1; 
             }
-            interestRate = 0.0999; // 9.99% annual interest rate for ONLINE loan
-        } else if (loanType == 4) { // Credit de Nevoi Personale
-            maxLoanAmount = 150000; // Maximum loan amount for variable interest rate loan
-            minLoanAmount = 1000; // Minimum loan amount for variable interest rate loan
-            maxLoanTermMonths = 60; // Maximum loan term for variable interest rate loan
+            interestRate = 0.0999; 
+        } else if (loanType == 4) { 
+            maxLoanAmount = 150000; 
+            minLoanAmount = 1000; 
+            maxLoanTermMonths = 60; 
             if (price < minLoanAmount || price > maxLoanAmount) {
                 printf("Loan amount for variable interest rate loan must be between %.2f and %.2f.\n", minLoanAmount, maxLoanAmount);
-                return -1; // Return -1 to indicate invalid loan amount
+                return -1; 
             }
             if (loanTermMonths < minLoanTermMonths || loanTermMonths > maxLoanTermMonths) {
                 printf("Loan term for variable interest rate loan must be between %d and %d months.\n", minLoanTermMonths, maxLoanTermMonths);
-                return -1; // Return -1 to indicate invalid loan term
+                return -1; 
             }
-            // Calculate interest rate based on loan amount
+            
             if (price <= 10000) {
-                interestRate = 0.0699; // 6.99% for loan amount <= 10000
+                interestRate = 0.0699; 
             } else if (price > 10000 && price <= 50000) {
-                interestRate = 0.0999; // 9.99% for loan amount > 10000 and <= 50000
+                interestRate = 0.0999; 
             } else {
-                interestRate = 0.1999; // 19.99% for loan amount > 50000
+                interestRate = 0.1999; 
             }
         } else {
             printf("Invalid loan type for Bank B.\n");
-            return -1; // Return -1 to indicate invalid loan type
+            return -1; 
         }
     }
-    // Bank C (VictoriaBank)
+  
     else if (bankChoice == 3) {
-        // Credit Garantat de consum, Credit Negarantat de consum, Credit Express
-        if (loanType == 5) { // Credit Garantat de consum
-            maxLoanAmount = 1800000; // Maximum loan amount
-            minLoanAmount = 0; // Minimum loan amount
-            maxLoanTermMonths = 60; // Maximum loan term
+       
+        if (loanType == 5) { 
+            maxLoanAmount = 1800000; 
+            minLoanAmount = 0; 
+            maxLoanTermMonths = 60; 
             if (price < minLoanAmount || price > maxLoanAmount) {
                 printf("Loan amount for Credit Garantat de consum at VictoriaBank must be between %.2f and %.2f.\n", minLoanAmount, maxLoanAmount);
-                return -1; // Return -1 to indicate invalid loan amount
+                return -1; 
             }
             if (loanTermMonths < 13 || loanTermMonths > maxLoanTermMonths) {
                 printf("Loan term for Credit Garantat de consum at VictoriaBank must be between 13 and %d months.\n", maxLoanTermMonths);
-                return -1; // Return -1 to indicate invalid loan term
+                return -1; 
             }
-            interestRate = 0.085; // 8.5% annual interest rate for Credit Garantat de consum at VictoriaBank
-        } else if (loanType == 6) { // Credit Negarantat de consum
-            maxLoanAmount = 300000; // Maximum loan amount
-            minLoanAmount = 0; // Minimum loan amount
-            maxLoanTermMonths = 60; // Maximum loan term
+            interestRate = 0.085; 
+        } else if (loanType == 6) { 
+            maxLoanAmount = 300000; 
+            minLoanAmount = 0; 
+            maxLoanTermMonths = 60; 
             if (price < minLoanAmount || price > maxLoanAmount) {
                 printf("Loan amount for Credit Negarantat de consum at VictoriaBank must be between %.2f and %.2f.\n", minLoanAmount, maxLoanAmount);
-                return -1; // Return -1 to indicate invalid loan amount
+                return -1; 
             }
             if (loanTermMonths < minLoanTermMonths || loanTermMonths > maxLoanTermMonths) {
                 printf("Loan term for Credit Negarantat de consum at VictoriaBank must be between %d and %d months.\n", minLoanTermMonths, maxLoanTermMonths);
-                return -1; // Return -1 to indicate invalid loan term
+                return -1; 
             }
-            interestRate = 0.105; // 10.5% annual interest rate for Credit Negarantat de consum at VictoriaBank
-        } else if (loanType == 7) { // Credit Express
-            maxLoanAmount = 300000; // Maximum loan amount
-            minLoanAmount = 1000; // Minimum loan amount
-            maxLoanTermMonths = 60; // Maximum loan term
+            interestRate = 0.105; 
+        } else if (loanType == 7) { 
+            maxLoanAmount = 300000; 
+            minLoanAmount = 1000; 
+            maxLoanTermMonths = 60; 
             if (price < minLoanAmount || price > maxLoanAmount) {
                 printf("Loan amount for Credit Express at VictoriaBank must be between %.2f and %.2f.\n", minLoanAmount, maxLoanAmount);
-                return -1; // Return -1 to indicate invalid loan amount
+                return -1; 
             }
             if (loanTermMonths < minLoanTermMonths || loanTermMonths > maxLoanTermMonths) {
                 printf("Loan term for Credit Express at VictoriaBank must be between %d and %d months.\n", minLoanTermMonths, maxLoanTermMonths);
-                return -1; // Return -1 to indicate invalid loan term
+                return -1; 
             }
-            interestRate = 0.098; // 9.5% annual interest rate for Credit Express at VictoriaBank
+            interestRate = 0.098; 
         } else {
             printf("Invalid loan type for VictoriaBank.\n");
-            return -1; // Return -1 to indicate invalid loan type
+            return -1; 
         }
     } else {
         printf("Bank not found.\n");
-        return -1; // Return -1 to indicate bank not found
+        return -1; 
     }
 
-    // Apply interest rate and calculate total loan
+    
     float totalLoan = price * (1 + (interestRate * loanTermMonths / 12.0));
     return totalLoan;
 }
@@ -128,7 +128,7 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    float price = atof(argv[1]);  // Convert price argument to float
+    float price = atof(argv[1]);  
     int loanType = atoi(argv[2]);
     int bankChoice = atoi(argv[3]);
     int loanTermMonths = atoi(argv[4]);
@@ -140,7 +140,7 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    // Calculate total loan amount based on input values
+    
     float totalLoan = calculateLoan(price, loanType, bankChoice, loanTermMonths);
 
     if (totalLoan == -1) {
@@ -150,7 +150,7 @@ int main(int argc, char *argv[]) {
 
     float monthlyPayment = totalLoan / loanTermMonths;
 
-    // Display the loan calculation results
+    
     printf("Total Loan Amount: %.2f\n", totalLoan);
     printf("Monthly Payment: %.2f\n", monthlyPayment);
 

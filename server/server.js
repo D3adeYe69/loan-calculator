@@ -8,7 +8,7 @@ const app = express();
 const port = 3000;
 
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static('public')); // Assuming your HTML and JavaScript files are in the 'public' directory
+app.use(express.static('public')); 
 
 app.post('/calculateLoan', (req, res) => {
     const { price, loanType, bankChoice, loanTermMonths } = req.body;
