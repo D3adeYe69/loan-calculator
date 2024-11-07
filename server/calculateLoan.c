@@ -27,7 +27,7 @@ float calculateLoan(float price, int loanType, int bankChoice, int loanTermMonth
         interestRate = 0.095;
     }
 
-    // first change
+    // second change
 
     else if (bankChoice == 2)
     {
